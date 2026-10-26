@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     
     strategy:
       matrix:
@@ -57,7 +57,7 @@ jobs:
         fail_ci_if_error: false
 
   test-deno:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     
     steps:
     - name: Checkout code
@@ -72,7 +72,7 @@ jobs:
       run: npm run test:deno
 
   test-windows:
-    runs-on: windows-latest
+    runs-on: [self-hosted, windows, x64]
     
     steps:
     - name: Checkout code
@@ -91,7 +91,7 @@ jobs:
       run: npm run test:unit
 
   test-macos:
-    runs-on: macos-latest
+    runs-on: [self-hosted, macOS, ARM64]
     
     steps:
     - name: Checkout code
@@ -110,7 +110,7 @@ jobs:
       run: npm run test:unit
 
   e2e-test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: [test]
     
     steps:
@@ -150,7 +150,7 @@ jobs:
         ../bin/claude-flow memory list
 
   docker-test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: [test]
     
     steps:
@@ -170,7 +170,7 @@ jobs:
         docker run --rm claude-flow:test --help
 
   benchmark:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: [test]
     
     steps:
@@ -214,7 +214,7 @@ jobs:
         "
 
   security:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     
     steps:
     - name: Checkout code
@@ -237,7 +237,7 @@ jobs:
         npx audit-ci --config audit-ci.json || true
 
   code-quality:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     
     steps:
     - name: Checkout code
@@ -267,7 +267,7 @@ jobs:
         path: eslint-report.json
 
   coverage-report:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: [test]
     
     steps:

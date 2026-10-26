@@ -48,7 +48,7 @@ env:
 jobs:
   validate-environment:
     name: Validate Test Environment
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     outputs:
       should-run-benchmarks: ${{ steps.check.outputs.should-run }}
     steps:
@@ -88,7 +88,7 @@ jobs:
 
   quick-benchmarks:
     name: Quick Benchmarks (PR)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: validate-environment
     if: github.event_name == 'pull_request' && needs.validate-environment.outputs.should-run-benchmarks == 'true'
     timeout-minutes: 15
@@ -180,7 +180,7 @@ jobs:
 
   standard-benchmarks:
     name: Standard Benchmarks
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: validate-environment
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
     timeout-minutes: 45
@@ -264,7 +264,7 @@ jobs:
 
   comprehensive-benchmarks:
     name: Comprehensive Benchmarks
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: validate-environment
     if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.profile == 'comprehensive')
     timeout-minutes: 180
@@ -352,7 +352,7 @@ jobs:
 
   docker-benchmarks:
     name: Docker Container Benchmarks
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: validate-environment
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     timeout-minutes: 60
@@ -391,7 +391,7 @@ jobs:
 
   performance-regression:
     name: Performance Regression Analysis
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: [standard-benchmarks]
     if: always() && needs.standard-benchmarks.result == 'success'
     steps:
@@ -466,7 +466,7 @@ jobs:
 
   notify-results:
     name: Notify Results
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: [quick-benchmarks, standard-benchmarks, comprehensive-benchmarks, docker-benchmarks]
     if: always() && (needs.standard-benchmarks.result == 'failure' || needs.comprehensive-benchmarks.result == 'failure')
     steps:

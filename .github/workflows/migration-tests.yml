@@ -10,7 +10,7 @@ on:
 jobs:
   local-tests:
     name: Local Execution Tests
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ (matrix.os) == 'ubuntu-latest' && fromJSON('[\"self-hosted\",\"linux\",\"x64\"]') || (matrix.os) == 'windows-latest' && fromJSON('[\"self-hosted\",\"windows\",\"x64\"]') || (matrix.os) == 'macos-latest' && fromJSON('[\"self-hosted\",\"macOS\",\"ARM64\"]') || (matrix.os) }}"
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -40,7 +40,7 @@ jobs:
 
   remote-npx-tests:
     name: Remote NPX Tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: local-tests
     
     steps:
@@ -73,7 +73,7 @@ jobs:
 
   docker-tests:
     name: Docker Tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: local-tests
     
     steps:
@@ -94,7 +94,7 @@ jobs:
 
   integration-tests:
     name: Integration Tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: [local-tests, remote-npx-tests]
     
     steps:
@@ -125,7 +125,7 @@ jobs:
 
   performance-tests:
     name: Performance Tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: local-tests
     
     steps:
@@ -183,7 +183,7 @@ jobs:
 
   test-summary:
     name: Test Summary
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: [local-tests, remote-npx-tests, docker-tests, integration-tests, performance-tests]
     if: always()
     
